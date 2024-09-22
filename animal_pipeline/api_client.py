@@ -49,16 +49,14 @@ class APIClient:
         
     @retry_api_call(max_retries=10, initial_backoff=5)
     def get(self, endpoint):
-        url = f"{self.base_url}/{endpoint}"
-        # print(url)
+        url = self.base_url + endpoint
         response = requests.get(url)
         response.raise_for_status()
         return response
     
     @retry_api_call(max_retries=10, initial_backoff=5)
     def post(self, endpoint, data):
-        url = f"{self.base_url}/{endpoint}"
-        # print(url)
+        url = self.base_url + endpoint
         response = requests.post(url, json=data)
         response.raise_for_status()
         return response

@@ -10,7 +10,7 @@ logger = Logger()
 
 
 def main():
-    base_url = "https://25fa-99-250-42-230.ngrok-free.app/animals/v1"
+    base_url = "https://25fa-99-250-42-230.ngrok-free.app/animals/v1/"
     api_client = APIClient(base_url)
     extractor = AnimalExtractor(api_client, logger, batch_size=20)
 
@@ -42,6 +42,7 @@ def main():
                 
         logger.info(f"Finished batch # {batch_number}")
         batch_number += 1
+    logger.notify("Job Completed: All animals are fetched and posted successfully.")
 
 if __name__ == "__main__":
     main()
