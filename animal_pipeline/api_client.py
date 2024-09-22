@@ -15,12 +15,13 @@ def retry_api_call(max_retries=10, initial_backoff=5):
             backoff = initial_backoff
             while retries <= max_retries:
                 try:
+                    endpoint = args[1]
                     response = func(*args, **kwargs)
                     # Only 2xx is accepted,
                     # According to problem statement only 5xx response is expected ocassionally
                     # but sometimes RateLimitter gives 429 response 
                     if not (200 <= response.status_code < 300):
-                        raise requests.exceptions.RequestException(f"API call error status_code: {response.status_code}", response=response)
+                        raise requests.exceptions.RequestException(f"API call error status_code: {response.status_code} | endpoint: {endpoint}", response=response)
                     return response.json()
                 except requests.exceptions.RequestException as e:
                     # retry exponentially for any error apart from 2xx
@@ -29,13 +30,15 @@ def retry_api_call(max_retries=10, initial_backoff=5):
                             retries += 1
                             if retries > max_retries:
                                 raise
-                            logging.error(f"Received non-2xx error: {e.response.status_code}. Retrying in {backoff} seconds...")
+                            logging.error(f"Received non-2xx error: {e.response.status_code} | endpoint: {endpoint} |  Retrying in {backoff} seconds...")
                             time.sleep(backoff)
                             backoff *= 2  # exponential retry seconds
                         else:
-                            raise 
+                            raise
                     else:
-                        logging.error(f"Received exception: {e}. Retrying in {backoff} seconds...")      
+                        logging.error(f"Received exception: {e}. Retrying in {backoff} seconds...") 
+                except Exception as e:
+                    logging.error(f"Received OTHER exception: {e}. Retrying in {backoff} seconds...")     
         return wrapper
     return decorator
 

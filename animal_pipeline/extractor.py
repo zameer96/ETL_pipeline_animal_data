@@ -61,6 +61,6 @@ class AnimalExtractor:
                 animal = self.animals_queue.pop(0)
                 details = self.fetch_animal_details(animal['id'])
                 animal_details.append(details)
-
+        self.logger.notify(f"FETCHED animals details list: {animal_details}")
         return animal_details
 

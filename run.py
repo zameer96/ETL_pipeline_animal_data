@@ -1,28 +1,35 @@
-# import logging
+import os
+from dotenv import load_dotenv
 from animal_pipeline import (APIClient,
                              AnimalExtractor,
                              AnimalTransformer,
                              AnimalLoader,
                              Logger)
 
+load_dotenv()
 
 logger = Logger()
 
 
-def main():
-    base_url = "https://25fa-99-250-42-230.ngrok-free.app/animals/v1/"
-    api_client = APIClient(base_url)
-    extractor = AnimalExtractor(api_client, logger, batch_size=20)
+CONFIG = {
+    "base_url": os.getenv("BASE_URL") or "http://localhost:3123/animals/v1/",
+    "batch_size": 100
+}
 
+
+def main():
+    base_url = CONFIG["base_url"]
+    api_client = APIClient(base_url)
+    extractor = AnimalExtractor(api_client, logger, batch_size=CONFIG["batch_size"])
     batch_number = 1
 
+    print("=== STARTING ANIMAL PIPELINE. STREAM LOGS FROM 'logs/' DIRECTORY! ===")
     # Pipeline
     while True:
         logger.info(f"Fetching batch # {batch_number}")
 
         # extract 100 animals at a time
         animal_details = extractor.get_next_animals_batch()
-        print(animal_details)
         
         # End if no more animals to fetch
         if not animal_details:
