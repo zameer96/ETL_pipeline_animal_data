@@ -57,7 +57,7 @@ class AnimalExtractor:
                 self.animals_queue = self.fetch_animals_list(self.current_page)
                 self.current_page += 1
 
-            while self.animals_queue and len(animal_details) < 100:
+            while self.animals_queue and len(animal_details) < self.batch_size:
                 animal = self.animals_queue.pop(0)
                 details = self.fetch_animal_details(animal['id'])
                 animal_details.append(details)

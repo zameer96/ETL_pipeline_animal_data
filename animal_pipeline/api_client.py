@@ -45,8 +45,6 @@ def retry_api_call(max_retries=10, initial_backoff=5):
 
 class APIClient:
     def __init__(self, base_url):
-        if not base_url:
-            raise ValueError("base_url required for APIClient")
         self.base_url = base_url
         self.logger = None
         

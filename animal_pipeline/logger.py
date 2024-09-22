@@ -15,7 +15,7 @@ class Logger:
         # setup loggers for each type
         self.info_logger = self._setup_logger('info', os.path.join(logs_dir, 'info.log'), level=logging.INFO)
         self.error_logger = self._setup_logger('error', os.path.join(logs_dir, 'info.log'), level=logging.ERROR)
-        self.notify_logger = self._setup_logger('notify', os.path.join(logs_dir, 'info.log'))
+        self.notify_logger = self._setup_logger('notify', os.path.join(logs_dir, 'info.log'), level=logging.INFO)
         self._log_job_time()
 
     def _setup_logger(self, name, log_file, level=logging.INFO):

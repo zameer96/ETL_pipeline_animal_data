@@ -39,7 +39,10 @@ class AnimalTransformer:
     
     def transform_field_born_at(self, animal_details):
         if 'born_at' in animal_details and animal_details['born_at']:
-            iso_time_format = datetime.fromtimestamp(animal_details['born_at'] / 1000, tz=timezone.utc).isoformat()
-            animal_details['born_at'] = iso_time_format
+            # iso_time_format = datetime.fromtimestamp(animal_details['born_at'] / 1000, tz=timezone.utc).isoformat()
+            # iso_time_format = datetime.fromtimestamp(animal_details['born_at'], tz=timezone.utc)
+            timestamp_seconds = animal_details['born_at'] / 1000
+            iso_time_format = datetime.fromtimestamp(timestamp_seconds, tz=timezone.utc)
+            animal_details['born_at'] = iso_time_format.isoformat().replace("+00:00", "Z")  
         return animal_details
         
